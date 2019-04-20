@@ -3,3 +3,8 @@
 
 # production
 /build
+
+#misc
+.env
+
+npm-debug.log*
