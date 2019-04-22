@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 
 import './App.css';
 import Layout from './components/hoc/Layout';
-import Signin from './components/admin/Signin';
+import Signin from './components/admin/auth/Signin';
 
 class App extends Component {
   render() {

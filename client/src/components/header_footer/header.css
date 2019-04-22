@@ -1,0 +1,30 @@
+.header_top {
+  font-size: x-large;
+}
+
+.header_bottom {
+  padding-left: 40px;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+}
+
+.material-icons {
+  display: none;
+}
+
+@media screen and (max-width: 500px) {
+  .button_text {
+    display: none;
+  }
+  .material-icons{
+      display: inline;
+  }
+}
