@@ -31,3 +31,45 @@
     transform: rotate(360deg);
   }
 }
+
+.layout {
+  margin: 0 auto;
+  margin-top: 90px;
+  overflow: hidden;
+}
+
+.admin {
+  align-items: center;
+  text-align: center;
+}
+
+.admin h2 {
+  display: block;
+}
+
+.menu_toggle{
+  display: none
+}
+
+.admin_nav {
+  display: flex;
+  padding-left: 8px
+}
+.nav_left {
+  width: 300px;
+  border-right: 2px solid #01285e;
+}
+
+.nav_right {
+  flex-grow: 1;
+}
+
+@media screen and (max-width: 500px) {
+  .nav_left{
+    display: none
+  }
+  .menu_toggle{
+    float: left;
+    display: inherit;
+  }
+}

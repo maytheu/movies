@@ -6,24 +6,24 @@ import "./sign.css";
 import Formfield from "../../utils/Formfield";
 import { checkValidityInput } from "../../utils/misc";
 
-class Signin extends Component {
+class ConfirmPasssword extends Component {
   state = {
     form: {
-      email: {
+      password: {
         elementType: "input",
         elementConfig: {
-          type: "email",
-          placeholder: "Email Address"
+          type: "password",
+          placeholder: "Password"
         },
         value: "",
         validation: {
           required: true,
-          isEmail: true
+          minLength: 6
         },
         valid: false,
         touch: false
       },
-      password: {
+      confirmPassword: {
         elementType: "input",
         elementConfig: {
           type: "password",
@@ -40,7 +40,8 @@ class Signin extends Component {
     },
     isFormValid: false,
     isLoading: false,
-    isFormError: false
+    isFormError: false,
+    isSuccess: false
   };
 
   inputChangedHandler = (event, formName) => {
@@ -74,11 +75,10 @@ class Signin extends Component {
     }
     if (validForm) {
       console.log(submitData);
-      this.setState({ isLoading: false });
-      this.props.history.push("/admin/now_showing");
+      this.setState({ isLoading: false, isSuccess: true });
     } else {
       console.log("invalid");
-      this.setState({ isLoading: false, isFormError: true });
+      this.setState({ isLoading: false, isFormError: true, isSuccess: false });
     }
   };
 
@@ -114,14 +114,19 @@ class Signin extends Component {
               disabled={!this.state.isFormValid}
               onClick={e => this.submitHandler(e)}
             >
-              Signin
+              Confirm Passsword
             </Button>
           )}
         </form>
-        {this.state.isFormError ? (
-          <Button onClick={() => this.props.history.push("/verify_email")}>
-            Verify Email
+        {this.state.isSuccess ? (
+          <Button onClick={() => this.props.history.push("/signin")}>
+            sign in
           </Button>
+        ) : (
+          ""
+        )}
+        {this.state.isFormError ? (
+          <div className="error"><i className="material-icons">cancel</i>Password do not match</div>
         ) : (
           ""
         )}
@@ -130,4 +135,4 @@ class Signin extends Component {
   }
 }
 
-export default Signin;
+export default ConfirmPasssword;

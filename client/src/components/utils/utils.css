@@ -1,0 +1,78 @@
+.input{
+
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 0px
+}
+
+.label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold
+}
+
+.inputElement{
+    font: inherit;
+    background-color: #fff;
+    outline: none;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    display: block;
+    width: 100%;
+    box-sizing: border-box
+}
+
+.inputElement:focus{
+    outline: none;
+    background-color: #ccc;
+}
+
+.invalid{
+    border: 1px solid red;
+    background-color: #e47c7c;
+}
+
+.drawerToggle {
+    width: 40px;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 14px 0;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.drawerToggle div {
+    width: 90%;
+    height: 3px;
+    background-color: black;
+    margin: 5px
+}
+
+.link{
+}
+
+.sideDrawer{
+    position: fixed;
+    width: 250px;
+    max-width: 70%;
+    height: 100%;
+    left: 0;
+    top: 100px;
+    z-index: 200;
+    background-color: white;
+    padding: 72px 16px;
+    box-sizing: border-box;
+    transition: transform 0.3s ease-out
+  }
+  .open{
+    transform: translateX(0) 
+  }
+  
+  .close{
+    transform: translateX(-100%)
+  }
+  

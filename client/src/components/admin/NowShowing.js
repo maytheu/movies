@@ -2,37 +2,36 @@ import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import "./sign.css";
-import Formfield from "../../utils/Formfield";
-import { checkValidityInput } from "../../utils/misc";
+import "./auth/sign.css";
+import AdminLayout from "../hoc/AdminLayout";
+import { checkValidityInput } from "../utils/misc";
+import Formfield from "../utils/Formfield";
 
-class Signin extends Component {
+class NowShowing extends Component {
   state = {
-    form: {
-      email: {
+    movieInfo: {
+      title: {
         elementType: "input",
         elementConfig: {
-          type: "email",
-          placeholder: "Email Address"
+          type: "text",
+          placeholder: "Movie Title"
         },
         value: "",
         validation: {
-          required: true,
-          isEmail: true
+          required: true
         },
         valid: false,
         touch: false
       },
-      password: {
+      movieLink: {
         elementType: "input",
         elementConfig: {
-          type: "password",
-          placeholder: "Password"
+          type: "text",
+          placeholder: "Embedded Url of the Video"
         },
         value: "",
         validation: {
-          required: true,
-          minLength: 6
+          required: true
         },
         valid: false,
         touch: false
@@ -40,42 +39,40 @@ class Signin extends Component {
     },
     isFormValid: false,
     isLoading: false,
-    isFormError: false
+    isFormError: false,
+    isSuccess: false
   };
 
   inputChangedHandler = (event, formName) => {
     const updatedForm = {
-      ...this.state.form,
+      ...this.state.movieInfo,
       [formName]: {
-        ...this.state.form[formName],
+        ...this.state.movieInfo[formName],
         value: event.target.value,
         valid: checkValidityInput(
           event.target.value,
-          this.state.form[formName].validation
+          this.state.movieInfo[formName].validation
         ),
         touch: true
       }
     };
     let validForm = true;
-    for (let inputKey in this.state.form) {
+    for (let inputKey in this.state.movieInfo) {
       validForm = updatedForm[inputKey].valid && validForm;
     }
-    this.setState({ form: updatedForm, isFormValid: validForm });
+    this.setState({ movieInfo: updatedForm, isFormValid: validForm });
   };
 
   submitHandler = event => {
     event.preventDefault();
     this.setState({ isLoading: true });
     let submitData = {};
-    let validForm = true;
-    for (let key in this.state.form) {
-      submitData[key] = this.state.form[key].value;
-      validForm = this.state.form[key].valid && validForm;
+    for (let key in this.state.movieInfo) {
+      submitData[key] = this.state.movieInfo[key].value;
     }
-    if (validForm) {
+    if (this.state.isFormValid) {
       console.log(submitData);
-      this.setState({ isLoading: false });
-      this.props.history.push("/admin/now_showing");
+      this.setState({ isLoading: false, isSuccess: true });
     } else {
       console.log("invalid");
       this.setState({ isLoading: false, isFormError: true });
@@ -84,10 +81,10 @@ class Signin extends Component {
 
   render() {
     const formElementArray = [];
-    for (let formKey in this.state.form) {
+    for (let formKey in this.state.movieInfo) {
       formElementArray.push({
         id: formKey,
-        config: this.state.form[formKey]
+        config: this.state.movieInfo[formKey]
       });
     }
 
@@ -104,30 +101,29 @@ class Signin extends Component {
       />
     ));
     return (
-      <div className="auth">
-        <form onSubmit={e => this.submitHandler(e)}>
-          {form}
-          {this.state.isLoading ? (
-            <CircularProgress thickness={7} style={{ color: "98c5e9" }} />
-          ) : (
-            <Button
-              disabled={!this.state.isFormValid}
-              onClick={e => this.submitHandler(e)}
-            >
-              Signin
-            </Button>
-          )}
-        </form>
-        {this.state.isFormError ? (
-          <Button onClick={() => this.props.history.push("/verify_email")}>
-            Verify Email
-          </Button>
-        ) : (
-          ""
-        )}
-      </div>
+      <AdminLayout>
+        <div className="auth">
+          <form onSubmit={e => this.submitHandler(e)}>
+            {form}
+            {this.state.isLoading ? (
+              <CircularProgress thickness={7} style={{ color: "98c5e9" }} />
+            ) : this.state.isSuccess ? (
+              <div className="form_success">
+                <i className="material-icons">check</i>Uploadedd Successfully
+              </div>
+            ) : (
+              <Button
+                disabled={!this.state.isFormValid}
+                onClick={e => this.submitHandler(e)}
+              >
+                Upload New Trailer
+              </Button>
+            )}
+          </form>
+        </div>
+      </AdminLayout>
     );
   }
 }
 
-export default Signin;
+export default NowShowing;

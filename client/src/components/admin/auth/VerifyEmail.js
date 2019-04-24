@@ -6,7 +6,7 @@ import "./sign.css";
 import Formfield from "../../utils/Formfield";
 import { checkValidityInput } from "../../utils/misc";
 
-class Signin extends Component {
+class VerifyEmail extends Component {
   state = {
     form: {
       email: {
@@ -22,25 +22,12 @@ class Signin extends Component {
         },
         valid: false,
         touch: false
-      },
-      password: {
-        elementType: "input",
-        elementConfig: {
-          type: "password",
-          placeholder: "Password"
-        },
-        value: "",
-        validation: {
-          required: true,
-          minLength: 6
-        },
-        valid: false,
-        touch: false
       }
     },
     isFormValid: false,
     isLoading: false,
-    isFormError: false
+    isFormError: false,
+    isSuccess: false
   };
 
   inputChangedHandler = (event, formName) => {
@@ -72,10 +59,9 @@ class Signin extends Component {
       submitData[key] = this.state.form[key].value;
       validForm = this.state.form[key].valid && validForm;
     }
-    if (validForm) {
+    if (this.state.isFormValid) {
       console.log(submitData);
-      this.setState({ isLoading: false });
-      this.props.history.push("/admin/now_showing");
+      this.setState({ isLoading: false, isSuccess: true });
     } else {
       console.log("invalid");
       this.setState({ isLoading: false, isFormError: true });
@@ -83,51 +69,38 @@ class Signin extends Component {
   };
 
   render() {
-    const formElementArray = [];
-    for (let formKey in this.state.form) {
-      formElementArray.push({
-        id: formKey,
-        config: this.state.form[formKey]
-      });
-    }
-
-    let form = formElementArray.map(formElement => (
-      <Formfield
-        key={formElement.id}
-        elementType={formElement.config.elementType}
-        elementConfig={formElement.config.elementConfig}
-        value={formElement.config.value}
-        invalid={!formElement.config.valid}
-        shouldValidate={formElement.config.validation}
-        touched={formElement.config.touch}
-        changed={event => this.inputChangedHandler(event, formElement.id)}
-      />
-    ));
+    const email = this.state.form.email;
     return (
       <div className="auth">
         <form onSubmit={e => this.submitHandler(e)}>
-          {form}
+          <Formfield
+            elementType={email.elementType}
+            elementConfig={email.elementConfig}
+            value={email.value}
+            invalid={!email.valid}
+            shouldValidate={email.validation}
+            touched={email.touch}
+            changed={event => this.inputChangedHandler(event, "email")}
+          />
           {this.state.isLoading ? (
             <CircularProgress thickness={7} style={{ color: "98c5e9" }} />
+          ) : this.state.isSuccess ? (
+            <div className="form_success">
+              <i className="material-icons">check</i>Check your Email For
+              Verification
+            </div>
           ) : (
             <Button
               disabled={!this.state.isFormValid}
               onClick={e => this.submitHandler(e)}
             >
-              Signin
+              Check Email
             </Button>
           )}
         </form>
-        {this.state.isFormError ? (
-          <Button onClick={() => this.props.history.push("/verify_email")}>
-            Verify Email
-          </Button>
-        ) : (
-          ""
-        )}
       </div>
     );
   }
 }
 
-export default Signin;
+export default VerifyEmail;
