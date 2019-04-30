@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { connect } from "react-redux";
 
 import "./sign.css";
 import Formfield from "../../utils/Formfield";
 import { checkValidityInput } from "../../utils/misc";
+import { resetAdmin } from "../../../actions/adminActions";
 
 class VerifyEmail extends Component {
   state = {
@@ -60,10 +62,17 @@ class VerifyEmail extends Component {
       validForm = this.state.form[key].valid && validForm;
     }
     if (this.state.isFormValid) {
-      console.log(submitData);
-      this.setState({ isLoading: false, isSuccess: true });
+      this.props.dispatch(resetAdmin(submitData)).then(response => {
+        if (response.payload.resetSuccess) {
+          this.setState({ isLoading: false, isSuccess: true });
+        } else {
+          this.setState({
+            isLoading: false,
+            isFormError: response.payload.message
+          });
+        }
+      });
     } else {
-      console.log("invalid");
       this.setState({ isLoading: false, isFormError: true });
     }
   };
@@ -89,6 +98,11 @@ class VerifyEmail extends Component {
               <i className="material-icons">check</i>Check your Email For
               Verification
             </div>
+          ) : this.state.isFormError === "Email not found" ||
+            this.state.isFormError ? (
+            <div className="error">
+              <i className="material-icons">cancel</i>Email not found
+            </div>
           ) : (
             <Button
               disabled={!this.state.isFormValid}
@@ -103,4 +117,4 @@ class VerifyEmail extends Component {
   }
 }
 
-export default VerifyEmail;
+export default connect()(VerifyEmail);

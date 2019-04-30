@@ -1,0 +1,30 @@
+.title {
+  font-size: x-large;
+  font-weight: 700;
+  margin-left: 24px;
+}
+.title_fav {
+  font-size: x-large;
+  font-weight: 700;
+}
+.favourite {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+.shows_fav {
+  margin-bottom: 60px;
+}
+.shows {
+  margin-bottom: 25px;
+}
+
+.error {
+color: red
+}
+@media screen and (max-width: 500px) {
+.favourite{
+  width: 100%
+}
+}

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Switch } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import "./App.css";
+import AuthCheck from "./components/hoc/AuthCheck";
 import Layout from "./components/hoc/Layout";
 import Signin from "./components/admin/auth/Signin";
 import VerifyEmail from "./components/admin/auth/VerifyEmail";
@@ -9,20 +10,38 @@ import ConfirmPasssword from "./components/admin/auth/ConfirmPasssword";
 import NowShowing from "./components/admin/NowShowing";
 import Featured from "./components/admin/Featured";
 import Votes from "./components/admin/Votes";
-import PrivateRoute from "./components/admin/auth/authRoutes/PrivateRoute";
-import PublicRoute from "./components/admin/auth/authRoutes/PublicRoute";
+import Home from "./components/content/Home";
+import Favourite from "./components/content/Favourite";
 
 class App extends Component {
   render() {
     return (
       <Layout>
         <Switch>
-          <PublicRoute user={false} path="/signin" exact component={Signin} />
-          <PublicRoute user={true} path="/verify_email" exact component={VerifyEmail} />
-          <PublicRoute user={false} path="/confirm_password" exact component={ConfirmPasssword} />
-          <PrivateRoute user={true} path="/admin/now_showing" exact component={NowShowing} />
-          <PrivateRoute user={false} path="/admin/featured" exact component={Featured} />
-          <PrivateRoute user={true} path="/admin/vote" exact component={Votes} />
+          <Route path="/signin" exact component={AuthCheck(Signin, false)} />
+          <Route
+            path="/verify_email"
+            exact
+            component={AuthCheck(VerifyEmail, false)}
+          />
+          <Route
+            path="/reset_password/:token"
+            exact
+            component={AuthCheck(ConfirmPasssword, false)}
+          />
+          <Route
+            path="/admin/now_showing"
+            exact
+            component={AuthCheck(NowShowing, true)}
+          />
+          <Route
+            path="/admin/featured"
+            exact
+            component={AuthCheck(Featured, true)}
+          />
+          <Route path="/admin/vote" exact component={AuthCheck(Votes, true)} />
+          <Route path="/favourite" exact component={AuthCheck(Favourite, false)} />
+          <Route path="/" exact component={AuthCheck(Home, false)} />
         </Switch>
       </Layout>
     );

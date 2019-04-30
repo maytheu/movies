@@ -5,7 +5,9 @@ const userSchema = mongoose.Schema({
   vote: {
     type: Number,
     default: 0
-  }
+  },
+  week:Number,
+  day: Number
 });
 
 const User = mongoose.model("User", userSchema);

@@ -1,29 +1,47 @@
-import React from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import ListItem from "@material-ui/core/ListItem";
 import Button from "@material-ui/core/Button";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import "./utils.css";
 import { adminLink } from "./misc";
+import { logoutAdmin } from "../../actions/adminActions";
 
-const SideDrawer = props => {
-  let attachedCSS = ["sideDrawer", "close"];
-  if (props.show) {
-    attachedCSS = ["sideDrawer", "open"];
-  }
-  const renderLinks = () =>
+class SideDrawer extends Component {
+  signoutHandler = () => {
+    this.props.dispatch(logoutAdmin()).then(response => {
+      if (response.payload.success) {
+        this.props.history.push("/");
+      }
+    });
+  };
+
+  renderLinks = () =>
     adminLink.map(link => (
-      <Link key={link.title} to={link.linkTo} onClick={props.close}>
+      <Link key={link.title} to={link.linkTo} onClick={this.props.close}>
         <ListItem>
-          <Button>{link.title}</Button>
+          {link.title === "Signout" ? (
+            <Button onClick={this.signoutHandler}>{link.title}</Button>
+          ) : (
+            <Button>{link.title}</Button>
+          )}{" "}
         </ListItem>
       </Link>
     ));
-  return (
-    <div className={attachedCSS.join(" ")} onClick={props.close}>
-      {renderLinks()}
-    </div>
-  );
-};
+  render() {
+    let attachedCSS = ["sideDrawer", "close"];
+    if (this.props.show) {
+      attachedCSS = ["sideDrawer", "open"];
+    }
 
-export default SideDrawer;
+    return (
+      <div className={attachedCSS.join(" ")} onClick={this.props.close}>
+        {this.renderLinks()}
+      </div>
+    );
+  }
+}
+
+export default connect()(withRouter(SideDrawer));

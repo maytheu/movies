@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const moment = require("moment");
+const cookieSession = require("cookie-session");
 
 const app = express();
 
@@ -15,6 +16,12 @@ mongoose.connect(process.env.DATABASE, { useNewUrlParser: true });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(
+  cookieSession({
+    maxAge: 6 * 24 * 60 * 60 * 1000,
+    keys: [process.env.cookieKey]
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -32,6 +39,7 @@ const { checkVote } = require("./middleware/checkVote");
 const { sendEmail } = require("./utils/mail/mail");
 require("./utils/facebook");
 const updateVote = require("./utils/updateVote");
+const { thisWeek } = require("./utils/thisWeek");
 
 //=================================
 //              ADMIN
@@ -77,7 +85,7 @@ app.post("/api/admin/reset_admin", (req, res) => {
     admin.generateResetToken((err, admin) => {
       if (err) return res.json({ success: false, err });
       sendEmail(admin.email, admin.name, null, "reset_password", admin);
-      return res.json({ success: true });
+      return res.json({ resetSuccess: true });
     });
   });
 });
@@ -142,11 +150,11 @@ app.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook"),
   (req, res) => {
-    res.redirect("/favourites");
+    res.redirect("/favourite");
   }
 );
 
-app.get("/api/user/auth", userAuth, (req, res) => {
+app.get("/api/user/auth", (req, res) => {
   res.status(200).json({
     isUserAuth: true,
     profileId: req.user.profileId
@@ -159,8 +167,23 @@ app.get("/api/user/vote_action", userAuth, checkVote, (req, res) => {
   });
 });
 
-app.get("/api/user/vote", (req, res) => {
-  updateVote(req, res);
+app.post("/api/user/vote_user", userAuth, checkVote, (req, res) => {
+  let date = new Date();
+  User.findOneAndUpdate(
+    { profileId: req.user.profileId },
+    { $inc: { vote: 1 }, $set: { week: thisWeek(), day: date.getDay() } },
+    function(err) {
+      if (err) return res.send(err);
+    },
+    Featured.findOneAndUpdate(
+      { _id: req.body.show },
+      { $inc: { vote: 1 } },
+      err => {
+        if (err) return res.send(err);
+        res.json({ success: true });
+      }
+    )
+  );
 });
 
 //=================================
@@ -206,7 +229,7 @@ app.get("/api/featured/shows", (req, res) => {
     .limit(limit)
     .exec((err, shows) => {
       if (err) return res.status(400).send(err);
-      res.status(200).json({ title: shows.title, videoLink: shows.videoLink });
+      res.send(shows);
     });
 });
 

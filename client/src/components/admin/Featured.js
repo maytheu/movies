@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { connect } from "react-redux";
 
 import "./auth/sign.css";
 import AdminLayout from "../hoc/AdminLayout";
 import { checkValidityInput } from "../utils/misc";
 import Formfield from "../utils/Formfield";
+import { adminUploadFeatured } from "../../actions/movieActions";
 
 class Featured extends Component {
   state = {
@@ -23,7 +25,7 @@ class Featured extends Component {
         valid: false,
         touch: false
       },
-      movieLink: {
+      videoLink: {
         elementType: "input",
         elementConfig: {
           type: "text",
@@ -71,10 +73,15 @@ class Featured extends Component {
       submitData[key] = this.state.movieInfo[key].value;
     }
     if (this.state.isFormValid) {
-      console.log(submitData);
-      this.setState({ isLoading: false, isSuccess: true });
+      this.props.dispatch(adminUploadFeatured(submitData))
+      .then(response => {
+        if (response.payload.success) {
+          this.setState({ isLoading: false, isSuccess: true });
+        } else {
+          this.setState({ isLoading: false, isFormError: true });
+        }
+      });
     } else {
-      console.log("invalid");
       this.setState({ isLoading: false, isFormError: true });
     }
   };
@@ -109,7 +116,7 @@ class Featured extends Component {
               <CircularProgress thickness={7} style={{ color: "98c5e9" }} />
             ) : this.state.isSuccess ? (
               <div className="form_success">
-                <i className="material-icons">check</i>Uploadedd Successfully
+                <i className="material-icons">check</i>Uploaded Successfully
               </div>
             ) : (
               <Button
@@ -120,10 +127,17 @@ class Featured extends Component {
               </Button>
             )}
           </form>
+          {this.state.isFormError ? (
+            <div className="error">
+              <i className="material-icons">cancel</i>Error Updating Trailer
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </AdminLayout>
     );
   }
 }
 
-export default Featured;
+export default connect()(Featured);

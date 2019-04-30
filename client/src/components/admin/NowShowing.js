@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { connect } from "react-redux";
 
 import "./auth/sign.css";
 import AdminLayout from "../hoc/AdminLayout";
 import { checkValidityInput } from "../utils/misc";
 import Formfield from "../utils/Formfield";
+import { adminUploadNow } from "../../actions/movieActions";
 
 class NowShowing extends Component {
   state = {
@@ -23,7 +25,7 @@ class NowShowing extends Component {
         valid: false,
         touch: false
       },
-      movieLink: {
+      videoLink: {
         elementType: "input",
         elementConfig: {
           type: "text",
@@ -71,14 +73,19 @@ class NowShowing extends Component {
       submitData[key] = this.state.movieInfo[key].value;
     }
     if (this.state.isFormValid) {
-      console.log(submitData);
-      this.setState({ isLoading: false, isSuccess: true });
+      this.props.dispatch(adminUploadNow(submitData)).then(response => {
+        console.log(response.payload.success)
+        if (response.payload.success) {
+          this.setState({ isLoading: false, isSuccess: true });
+        } else {
+          this.setState({ isLoading: false, isFormError: true });
+        }
+      });
     } else {
-      console.log("invalid");
       this.setState({ isLoading: false, isFormError: true });
     }
   };
-
+ 
   render() {
     const formElementArray = [];
     for (let formKey in this.state.movieInfo) {
@@ -120,10 +127,17 @@ class NowShowing extends Component {
               </Button>
             )}
           </form>
+          {this.state.isFormError ? (
+            <div className="error">
+              <i className="material-icons">cancel</i>Error Updating Trailer
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </AdminLayout>
     );
   }
 }
 
-export default NowShowing;
+export default connect()(NowShowing);

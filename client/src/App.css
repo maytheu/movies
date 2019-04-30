@@ -32,6 +32,11 @@
   }
 }
 
+.loader{
+  text-align: center;
+  margin-top: 100px;
+}
+
 .layout {
   margin: 0 auto;
   margin-top: 90px;
@@ -58,6 +63,7 @@
 .nav_left {
   width: 300px;
   border-right: 2px solid #01285e;
+  height: 280px;
 }
 
 .nav_right {

@@ -6,22 +6,31 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { connect } from "react-redux";
 
 import AdminLayout from "../hoc/AdminLayout";
+import { adminVote } from "../../actions/movieActions";
 
 class Votes extends Component {
   state = {
-    isLoading: false
+    isLoading: true
   };
+
+  componentDidMount() {
+    this.props.dispatch(adminVote()).then(response => {
+      this.setState({ isLoading: false });
+    });
+  }
+
   render() {
-      const style = {fontSize: '1rem', fontWeight:'800'}
+    const style = { fontSize: "1rem", fontWeight: "800" };
     return (
       <AdminLayout>
         <Paper>
-          <Table className='centered'>
+          <Table className="centered">
             <TableHead>
               <TableRow>
-                <TableCell  style={style}>Movie</TableCell>
+                <TableCell style={style}>Movie</TableCell>
                 <TableCell style={style}>Link</TableCell>
                 <TableCell style={style}>Votes</TableCell>
               </TableRow>
@@ -29,12 +38,16 @@ class Votes extends Component {
             <TableBody>
               {this.state.isLoading ? (
                 <CircularProgress thickness={7} style={{ color: "98c5e9" }} />
+              ) : this.props.isMovies.shows ? (
+                this.props.isMovies.shows.map(show => (
+                  <TableRow key={show._id}>
+                    <TableCell>{show.title}</TableCell>
+                    <TableCell>{show.videoLink}</TableCell>
+                    <TableCell>{show.vote}</TableCell>
+                  </TableRow>
+                ))
               ) : (
-                <TableRow>
-                  <TableCell>Avengers</TableCell>
-                  <TableCell>hhtps://you.tu/fjgudjei</TableCell>
-                  <TableCell>55</TableCell>
-                </TableRow>
+                ""
               )}
             </TableBody>
           </Table>
@@ -44,4 +57,10 @@ class Votes extends Component {
   }
 }
 
-export default Votes;
+function mapStateToProps(state) {
+  return {
+    isMovies: state.movie
+  };
+}
+
+export default connect(mapStateToProps)(Votes);

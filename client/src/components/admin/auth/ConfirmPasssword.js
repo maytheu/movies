@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import axios from "axios";
 
 import "./sign.css";
 import Formfield from "../../utils/Formfield";
 import { checkValidityInput } from "../../utils/misc";
+import { ADMIN_SERVER } from "../../utils/url";
 
 class ConfirmPasssword extends Component {
   state = {
@@ -41,8 +43,14 @@ class ConfirmPasssword extends Component {
     isFormValid: false,
     isLoading: false,
     isFormError: false,
-    isSuccess: false
+    isSuccess: false,
+    resetToken: ""
   };
+
+  componentDidMount() {
+    const resetToken = this.props.match.params.token;
+    this.setState({ resetToken });
+  }
 
   inputChangedHandler = (event, formName) => {
     const updatedForm = {
@@ -74,10 +82,22 @@ class ConfirmPasssword extends Component {
       validForm = this.state.form[key].valid && validForm;
     }
     if (validForm) {
-      console.log(submitData);
-      this.setState({ isLoading: false, isSuccess: true });
+      axios
+        .post(`${ADMIN_SERVER}reset_password`, {
+          ...submitData,
+          resetToken: this.state.resetToken
+        })
+        .then(response => {
+          if (!response.data.success) {
+            this.setState({
+              isFormError: response.payload.message,
+              isLoading: false
+            });
+          } else {
+            this.setState({ isLoading: false, isSuccess: true });
+          }
+        });
     } else {
-      console.log("invalid");
       this.setState({ isLoading: false, isFormError: true, isSuccess: false });
     }
   };
@@ -119,14 +139,16 @@ class ConfirmPasssword extends Component {
           )}
         </form>
         {this.state.isSuccess ? (
-          <Button onClick={() => this.props.history.push("/signin")}>
-            sign in
-          </Button>
-        ) : (
-          ""
-        )}
-        {this.state.isFormError ? (
-          <div className="error"><i className="material-icons">cancel</i>Password do not match</div>
+          <div className="form_success">
+            <Button onClick={() => this.props.history.push("/signin")}>
+              sign in
+            </Button>
+          </div>
+        ) : this.state.isFormError ||
+          this.state.isFormError === "Sorry, bad token, generate a new one." ? (
+          <div className="error">
+            <i className="material-icons">cancel</i>Password do not match
+          </div>
         ) : (
           ""
         )}

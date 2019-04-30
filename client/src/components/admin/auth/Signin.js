@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { connect } from "react-redux";
 
 import "./sign.css";
 import Formfield from "../../utils/Formfield";
 import { checkValidityInput } from "../../utils/misc";
+import { loginAdmin } from "../../../actions/adminActions";
 
 class Signin extends Component {
   state = {
@@ -73,11 +75,18 @@ class Signin extends Component {
       validForm = this.state.form[key].valid && validForm;
     }
     if (validForm) {
-      console.log(submitData);
-      this.setState({ isLoading: false });
-      this.props.history.push("/admin/now_showing");
+      this.props.dispatch(loginAdmin(submitData)).then(response => {
+          if (response.payload.loginSuccess) {
+            this.setState({isLoading: false})
+            this.props.history.push("/admin/now_showing");
+          } else {
+            this.setState({
+              isFormError: true,
+              isLoading: false
+            });
+          }
+      });
     } else {
-      console.log("invalid");
       this.setState({ isLoading: false, isFormError: true });
     }
   };
@@ -130,4 +139,4 @@ class Signin extends Component {
   }
 }
 
-export default Signin;
+export default connect()(Signin);
