@@ -322,5 +322,13 @@ app.get("/api/featured/vote", adminAuth, (req, res) => {
     });
 });
 
+// DEFAULT
+if (process.env.NODE_ENV === "production") {
+  const path = require("path");
+  app.get("/*", (req, res) => {
+    res.sendfile(path.resolve(__dirname, "../client", "build", "index.html"));
+  });
+}
+
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => console.log(`Server running at port: ${PORT}`));
