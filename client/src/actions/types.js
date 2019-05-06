@@ -12,3 +12,5 @@ export const GET_FEATURED = "get_featured";
 export const USER_AUTH = "user_auth";
 export const USER_CHECK_VOTE = "user_check_vote";
 export const USER_VOTE = "user_vote";
+export const USER_BUY = "user_buy";
+export const USER_EMAIL = "user_email";

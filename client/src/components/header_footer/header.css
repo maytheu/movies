@@ -1,9 +1,11 @@
 .header_top {
   font-size: x-large;
+  color: black;
 }
 
 .header_bottom {
   padding-left: 40px;
+  color:cadetblue
 }
 
 .footer {
@@ -11,8 +13,8 @@
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: red;
-  color: white;
+  background-color: aqua;
+  color: black;
   text-align: center;
 }
 

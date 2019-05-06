@@ -2,24 +2,21 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import { authAdmin } from "../../actions/adminActions";
+import { authUser, checkUserVote } from "../../actions/userActions";
 
 export default function(ComposedClass, reload) {
-  class AuthCheck extends Component {
+  class UserAuth extends Component {
     state = {
       loading: true
     };
 
     componentDidMount() {
-      this.props.dispatch(authAdmin()).then(response => {
-        let admin = this.props.isAdmin.adminData;
-        if (!admin.isAdminAuth) {
+      this.props.dispatch(checkUserVote());
+      this.props.dispatch(authUser()).then(response => {
+        let user = this.props.isUser.userData;
+        if (!user.isUserAuth) {
           if (reload) {
-            this.props.history.push("/signin");
-          }
-        } else {
-          if (reload === false) {
-            this.props.history.push("/admin/now_showing");
+            this.props.history.push("/favourite");
           }
         }
         this.setState({ loading: false });
@@ -34,15 +31,15 @@ export default function(ComposedClass, reload) {
           </div>
         );
       }
-      return <ComposedClass {...this.props} user={this.props.isAdmin} />;
+      return <ComposedClass {...this.props} user={this.props.isUser} />;
     }
   }
 
   function mapStateToProps(state) {
     return {
-      isAdmin: state.admin
+      isUser: state.user
     };
   }
 
-  return connect(mapStateToProps)(AuthCheck);
+  return connect(mapStateToProps)(UserAuth);
 }

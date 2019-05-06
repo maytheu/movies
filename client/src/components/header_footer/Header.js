@@ -25,30 +25,30 @@ class Header extends Component {
               <div className="header_bottom">Centre</div>
             </div>
           </div>
-            <Link to="/">
-              <Button color="inherit">
-                <i className="material-icons">home</i>
-                <span className="button_text">Home</span>
-              </Button>
-            </Link>
-            <Link to="/favourite">
-              <Button color="inherit">
-                <i className="material-icons">favorite</i>
-                <span className="button_text">Favourite</span>
-              </Button>
-            </Link>
-            <Link to="/contact">
-              <Button color="inherit">
-                <i className="material-icons">contact_mail</i>
-                <span className="button_text">Contact Us</span>
-              </Button>
-            </Link>
-            <Link to="/signout">
-              <Button color="inherit">
-                <i className="material-icons">shuffle</i>
-                <span className="button_text">sign Out</span>
-              </Button>
-            </Link>
+          <Link to="/">
+            <Button color="inherit">
+              <i className="material-icons">home</i>
+              <span className="button_text">Home</span>
+            </Button>
+          </Link>
+          <Link to="/favourite">
+            <Button color="inherit">
+              <i className="material-icons">favorite</i>
+              <span className="button_text">Favourite</span>
+            </Button>
+          </Link>
+          <Link to="/contact">
+            <Button color="inherit">
+              <i className="material-icons">contact_mail</i>
+              <span className="button_text">Contact Us</span>
+            </Button>
+          </Link>
+          <Link to="/buy">
+            <Button color="inherit">
+              <i className="material-icons">cart</i>
+              <span className="button_text">Buy Ticket</span>
+            </Button>
+          </Link>
         </Toolbar>
       </AppBar>
     );

@@ -21,10 +21,14 @@
 }
 
 .error {
-color: red
+  color: red;
+}
+
+.paystack {
+  margin-top: 200px;
 }
 @media screen and (max-width: 500px) {
-.favourite{
-  width: 100%
-}
+  .favourite {
+    width: 100%;
+  }
 }

@@ -1,4 +1,10 @@
-import { USER_AUTH, USER_CHECK_VOTE, USER_VOTE } from "../actions/types";
+import {
+  USER_AUTH,
+  USER_CHECK_VOTE,
+  USER_VOTE,
+  USER_BUY,
+  USER_EMAIL
+} from "../actions/types";
 
 export default function(state = {}, action) {
   switch (action.type) {
@@ -8,7 +14,10 @@ export default function(state = {}, action) {
       return { ...state, checkVote: action.payload };
     case USER_VOTE:
       return { ...state };
-    //ADD_TO_CART_USER
+    case USER_BUY:
+      return { ...state, buy: action.payload };
+    case USER_EMAIL:
+      return { ...state };
     default:
       return state;
   }

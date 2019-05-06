@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import './header.css'
+import "./header.css";
 
 const Footer = () => {
-    return (
-        <div className='footer'>
-            Lorem ipsum
-        </div>
-    );
+  return (
+    <div className="footer">
+      Copyright (C) 2019 Cinema Centre. All rights reserved. 
+    </div>
+  );
 };
 
 export default Footer;

@@ -34,13 +34,15 @@
 
 .loader{
   text-align: center;
-  margin-top: 100px;
+  margin-top: 220px;
 }
 
 .layout {
   margin: 0 auto;
-  margin-top: 90px;
+  margin-top: 85px;
   overflow: hidden;
+  background-color: aquamarine;
+  min-height: -webkit-fill-available;
 }
 
 .admin {

@@ -13,16 +13,21 @@ class Favourite extends Component {
     isLoading: true
   };
   componentDidMount() {
-    this.props.dispatch(getFeatured())
+    this.props.dispatch(getFeatured());
     this.props.dispatch(authUser()).then(response => {
       this.setState({ isLoading: false });
     });
     this.props.dispatch(checkUserVote());
   }
 
+  voteUser = (id, user) => {
+    this.props
+      .dispatch(vote(id, user))
+      .then(() => this.props.dispatch(checkUserVote()));
+  };
+
   render() {
     let user = this.props.isUser;
-    console.log(user);
     let shows = this.props.isMovies.favourite ? (
       this.props.isMovies.favourite.map(show => (
         <div key={show._id} className="favourite">
@@ -51,9 +56,7 @@ class Favourite extends Component {
               </a>
             ) : user.checkVote.isVote ? (
               <Button
-                onClick={() =>
-                  this.props.dispatch(vote(show._id, user.userData.profileId))
-                }
+                onClick={() => this.voteUser(show._id, user.userData.profileId)}
               >
                 Vote
               </Button>

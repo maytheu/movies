@@ -31,6 +31,7 @@ const { Admin } = require("./model/admin");
 const { NowShowing } = require("./model/nowShowing");
 const { Featured } = require("./model/featured");
 const { User } = require("./model/user");
+const { Payment } = require("./model/payment");
 
 const { adminAuth } = require("./middleware/adminAuth");
 const { userAuth } = require("./middleware/userAuth");
@@ -38,7 +39,6 @@ const { checkVote } = require("./middleware/checkVote");
 
 const { sendEmail } = require("./utils/mail/mail");
 require("./utils/facebook");
-const updateVote = require("./utils/updateVote");
 const { thisWeek } = require("./utils/thisWeek");
 
 //=================================
@@ -144,7 +144,10 @@ app.get("/api/admin/logout", adminAuth, (req, res) => {
 //=================================
 //              USER
 //=================================
-app.get("/auth/facebook", passport.authenticate("facebook"));
+app.get(
+  "/auth/facebook",
+  passport.authenticate("facebook", { scope: ["email"] })
+);
 
 app.get(
   "/auth/facebook/callback",
@@ -154,10 +157,12 @@ app.get(
   }
 );
 
-app.get("/api/user/auth", (req, res) => {
+app.get("/api/user/auth", userAuth, (req, res) => {
   res.status(200).json({
     isUserAuth: true,
-    profileId: req.user.profileId
+    profileId: req.user.profileId,
+    name: req.user.name,
+    email: req.user.email
   });
 });
 
@@ -171,18 +176,77 @@ app.post("/api/user/vote_user", userAuth, checkVote, (req, res) => {
   let date = new Date();
   User.findOneAndUpdate(
     { profileId: req.user.profileId },
-    { $inc: { vote: 1 }, $set: { week: thisWeek(), day: date.getDay() } },
+    {
+      $set: { week: thisWeek(), day: date.getDay() },
+      $inc: { vote: 1 }
+    },
     function(err) {
       if (err) return res.send(err);
-    },
-    Featured.findOneAndUpdate(
-      { _id: req.body.show },
-      { $inc: { vote: 1 } },
-      err => {
-        if (err) return res.send(err);
+      Featured.findOneAndUpdate(
+        { _id: req.body.show },
+        { $inc: { vote: 1 } },
+        err => {
+          if (err) return res.send(err);
+          res.json({ success: true });
+        }
+      );
+    }
+  );
+});
+
+app.post("/api/user/buy", userAuth, (req, res) => {
+  let userHistory = [];
+  let paymentData = {};
+
+  req.body.shows.forEach(element => {
+    userHistory.push({
+      dateBooked: Date.now(),
+      show: element.title,
+      id: element.id
+    });
+  });
+
+  paymentData.user = {
+    //user details
+    id: req.user._id,
+    name: req.user.name,
+    email: req.user.email
+  };
+
+  paymentData.payment = {
+    ...req.body.payment
+  };
+
+  paymentData.show = userHistory;
+
+  User.findOneAndUpdate(
+    { profileId: req.user.profileId },
+    { $push: { history: userHistory } },
+    { new: true },
+    err => {
+      if (err) return res.send(err);
+      const payment = new Payment(paymentData);
+      payment.save((err, doc) => {
+        if (err) return res.json({ success: false, err });
+        let shows = [];
+        doc.show.forEach(item => {
+          shows.push({ id: item.id, title: item.title });
+        });
+        sendEmail(req.user.email, req.user.name, null, "purchase", paymentData);
         res.json({ success: true });
-      }
-    )
+      });
+    }
+  );
+});
+
+app.post("/api/user/set_email", userAuth, (req, res) => {
+  User.update(
+    { profileId: req.user.profileId },
+    { $set: { email: req.body.email } },
+    err => {
+      if (err) return res.send(err);
+      res.json({ success: true });
+    }
   );
 });
 

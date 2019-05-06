@@ -30,6 +30,7 @@
     "nodemailer": "^6.1.0",
     "nodemon": "^1.18.11",
     "passport": "^0.4.0",
-    "passport-facebook": "^3.0.0"
+    "passport-facebook": "^3.0.0",
+    "paystack": "^2.0.1"
   }
 }

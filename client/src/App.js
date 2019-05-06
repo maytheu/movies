@@ -12,6 +12,8 @@ import Featured from "./components/admin/Featured";
 import Votes from "./components/admin/Votes";
 import Home from "./components/content/Home";
 import Favourite from "./components/content/Favourite";
+import Paystack from "./components/content/Paystack";
+import UserAuth from "./components/hoc/UserAuth";
 
 class App extends Component {
   render() {
@@ -40,8 +42,9 @@ class App extends Component {
             component={AuthCheck(Featured, true)}
           />
           <Route path="/admin/vote" exact component={AuthCheck(Votes, true)} />
-          <Route path="/favourite" exact component={AuthCheck(Favourite, false)} />
-          <Route path="/" exact component={AuthCheck(Home, false)} />
+          <Route path="/favourite" exact component={UserAuth(Favourite)} />
+          <Route path='/buy' exact component={UserAuth(Paystack, true)} />
+          <Route path="/" exact component={UserAuth(Home)} />
         </Switch>
       </Layout>
     );

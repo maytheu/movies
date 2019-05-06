@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import './content.css'
+import "./content.css";
 import { getShows } from "../../actions/movieActions";
 
 class Home extends Component {
@@ -34,7 +34,7 @@ class Home extends Component {
         <CircularProgress thickness={7} style={{ color: "98c5e9" }} />
       </div>
     );
-    return <div className='shows'>{shows}</div>;
+    return <div className="shows">{shows}</div>;
   }
 }
 

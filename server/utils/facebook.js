@@ -20,6 +20,7 @@ passport.use(
       clientID: process.env.facebookClientID,
       clientSecret: process.env.facebookClientSecret,
       callbackURL: "/auth/facebook/callback",
+      profileFields: ["id", "displayName", "emails"],
       proxy: true
     },
     async (accessToken, refreshToken, profile, done) => {
@@ -29,7 +30,11 @@ passport.use(
         //true
         return done(null, existingUser);
       }
-      const user = await new User({ profileId: profile.id }).save();
+      const user = await new User({
+        profileId: profile.id,
+        name: profile.displayName,
+        email: profile.emails[0].value
+      }).save();
       done(null, user);
     }
   )
