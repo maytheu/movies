@@ -52,13 +52,11 @@ class Paystack extends Component {
     });
   }
   callback = response => {
-    console.log(response); // card charged successfully, get reference here
     this.props
       .dispatch(
         userBuy({ shows: this.props.isMovies.upcoming, payment: response })
       )
       .then(response => {
-        console.log(response)
         if (response.payload.success) {
           setTimeout(() => {
             this.props.history.push("/");
