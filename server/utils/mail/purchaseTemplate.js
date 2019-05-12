@@ -5,7 +5,7 @@ const purchase = data => {
         template += `
               <div style="font-family: Helvetica, Arial, sans-serif; letter-spacing: 0.5px; line-height: 1.4; margin: 0; padding: 15px 25px ; text-transform: uppercase;">
                   <h3>
-                      ${item.title}
+                      ${item.show}
                   </h3>
                </div>
               `;

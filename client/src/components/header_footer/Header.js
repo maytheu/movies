@@ -45,7 +45,7 @@ class Header extends Component {
           </Link>
           <Link to="/buy">
             <Button color="inherit">
-              <i className="material-icons">cart</i>
+              <i className="material-icons">payment</i>
               <span className="button_text">Buy Ticket</span>
             </Button>
           </Link>

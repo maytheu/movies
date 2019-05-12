@@ -13,6 +13,10 @@ require("dotenv").config();
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DATABASE, { useNewUrlParser: true });
 
+// app.use(express.json());
+// app.use(express.urlencoded());
+// // app.use(express.multipart())
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -40,6 +44,13 @@ const { checkVote } = require("./middleware/checkVote");
 const { sendEmail } = require("./utils/mail/mail");
 require("./utils/facebook");
 const { thisWeek } = require("./utils/thisWeek");
+
+//CORS request
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 //=================================
 //              ADMIN
