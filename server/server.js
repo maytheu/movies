@@ -36,6 +36,7 @@ const { NowShowing } = require("./model/nowShowing");
 const { Featured } = require("./model/featured");
 const { User } = require("./model/user");
 const { Payment } = require("./model/payment");
+const { About } = require("./model/about");
 
 const { adminAuth } = require("./middleware/adminAuth");
 const { userAuth } = require("./middleware/userAuth");
@@ -48,7 +49,10 @@ const { thisWeek } = require("./utils/thisWeek");
 //CORS request
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   next();
 });
 
@@ -98,6 +102,36 @@ app.post("/api/admin/reset_admin", (req, res) => {
       sendEmail(admin.email, admin.name, null, "reset_password", admin);
       return res.json({ resetSuccess: true });
     });
+  });
+});
+
+app.post("/api/admin/about", adminAuth, (req, res) => {
+  const about = new About(req.body);
+  about.save((err, doc) => {
+    if (err) return res.json({ success: false, err });
+    res.status(200).json({
+      success: true,
+      upload: doc
+    });
+  });
+});
+
+app.post('/api/admin/edit_about', adminAuth, (req, res) => {
+	About.findOneAndUpdate({_id: req.body.id},{ $set: req.body }, { new: true },
+    (err, doc) => {
+      if (err) return res.json({ success: false, err });
+      return res.status(200).send({
+        success: true,
+        upload: doc
+      });
+    }
+  );
+})
+
+app.get("/api/admin/contact", (req, res) => {
+  About.find({}, (err, contact) => {
+    if (err) return res.status(400).send(err);
+    res.status(200).send(contact);
   });
 });
 

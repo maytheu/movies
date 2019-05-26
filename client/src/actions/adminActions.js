@@ -6,6 +6,9 @@ import {
   ADMIN_AUTH,
   ADMIN_LOGOUT,
   ADMIN_RESET,
+  ADMIN_ABOUT,
+  ADMIN_EDIT,
+  CONTACT
 } from "./types";
 
 export function loginAdmin(data) {
@@ -40,6 +43,40 @@ export function logoutAdmin() {
     payload: request
   };
 }
+
+export function aboutAdmin(data) {
+  const request = axios
+    .post(`${ADMIN_SERVER}about`, data)
+    .then(response => response.data);
+
+  return {
+    type: ADMIN_ABOUT,
+    payload: request
+  };
+}
+
+export function editAboutAdmin(data) {
+  const request = axios
+    .post(`${ADMIN_SERVER}edit_about`, data)
+    .then(response => response.data);
+
+  return {
+    type: ADMIN_EDIT,
+    payload: request
+  };
+}
+ 
+export function contact() {
+  const request = axios.get(`${ADMIN_SERVER}contact`)
+  .then(response => response.data[0]);
+
+  return {
+    type: CONTACT,
+    payload: request
+  };
+}
+
+
 
 export function resetAdmin(data) {
   const request = axios

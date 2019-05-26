@@ -3,6 +3,8 @@ import {
   ADMIN_AUTH,
   ADMIN_LOGOUT,
   ADMIN_RESET,
+  CONTACT,
+  ADMIN_ABOUT, ADMIN_EDIT
 } from "../actions/types";
 
 export default function(state = {}, action) {
@@ -13,6 +15,12 @@ export default function(state = {}, action) {
       return { ...state, adminData: action.payload };
     case ADMIN_LOGOUT:
       return { ...state };
+    case ADMIN_ABOUT:
+      return { ...state };
+    case ADMIN_EDIT:
+      return { ...state };
+	  case CONTACT:
+      return { ...state, contact: action.payload };
     case ADMIN_RESET:
       return { ...state };
     default:

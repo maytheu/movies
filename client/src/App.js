@@ -9,11 +9,13 @@ import VerifyEmail from "./components/admin/auth/VerifyEmail";
 import ConfirmPasssword from "./components/admin/auth/ConfirmPasssword";
 import NowShowing from "./components/admin/NowShowing";
 import Featured from "./components/admin/Featured";
+import About from "./components/admin/About";
 import Votes from "./components/admin/Votes";
 import Home from "./components/content/Home";
 import Favourite from "./components/content/Favourite";
 import Paystack from "./components/content/Paystack";
 import UserAuth from "./components/hoc/UserAuth";
+import Contact from "./components/content/Contact";
 
 class App extends Component {
   render() {
@@ -41,9 +43,11 @@ class App extends Component {
             exact
             component={AuthCheck(Featured, true)}
           />
+          <Route path="/admin/about" exact component={AuthCheck(About, true)} />
           <Route path="/admin/vote" exact component={AuthCheck(Votes, true)} />
+          <Route path="/contact" exact component={UserAuth(Contact)} />
           <Route path="/favourite" exact component={UserAuth(Favourite)} />
-          <Route path='/buy' exact component={UserAuth(Paystack, true)} />
+          <Route path="/buy" exact component={UserAuth(Paystack, true)} />
           <Route path="/" exact component={UserAuth(Home)} />
         </Switch>
       </Layout>

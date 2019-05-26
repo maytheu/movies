@@ -23,7 +23,6 @@ class AdminLayout extends Component {
     return (
       <div className="admin">
         <h2>
-          {" "}
           <div className="menu_toggle">
             <ToggleMenu toggle={this.sideDrawerHandler} />
             <SideDrawer
