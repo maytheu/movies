@@ -17,7 +17,6 @@ class Contact extends Component {
 
   render() {
     let contact = this.props.contact.contact;
-//    console.log(contact.about)
     return (
       <div className="auth">
         {this.state.isLoading ? (

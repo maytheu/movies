@@ -2,9 +2,9 @@ export const ADMIN_LOGIN = "admin_login";
 export const ADMIN_AUTH = "admin_auth";
 export const ADMIN_LOGOUT = "admin_logout";
 export const ADMIN_RESET = "admin_reset";
-export const ADMIN_ABOUT = 'admin_about'
-export const CONTACT = 'contact'
-export const ADMIN_EDIT = 'admin__edit'
+export const ADMIN_ABOUT = "admin_about";
+export const CONTACT = "contact";
+export const ADMIN_EDIT = "admin_edit";
 
 export const ADMIN_POST_NOW = "admin_post_now";
 export const ADMIN_POST_FEATURED = "admin_post_featured";

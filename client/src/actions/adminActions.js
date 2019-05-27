@@ -65,18 +65,17 @@ export function editAboutAdmin(data) {
     payload: request
   };
 }
- 
+
 export function contact() {
-  const request = axios.get(`${ADMIN_SERVER}contact`)
-  .then(response => response.data[0]);
+  const request = axios
+    .get(`${ADMIN_SERVER}contact`)
+    .then(response => response.data[0]);
 
   return {
     type: CONTACT,
     payload: request
   };
 }
-
-
 
 export function resetAdmin(data) {
   const request = axios

@@ -4,7 +4,8 @@ import {
   ADMIN_LOGOUT,
   ADMIN_RESET,
   CONTACT,
-  ADMIN_ABOUT, ADMIN_EDIT
+  ADMIN_ABOUT,
+  ADMIN_EDIT
 } from "../actions/types";
 
 export default function(state = {}, action) {
@@ -19,7 +20,7 @@ export default function(state = {}, action) {
       return { ...state };
     case ADMIN_EDIT:
       return { ...state };
-	  case CONTACT:
+    case CONTACT:
       return { ...state, contact: action.payload };
     case ADMIN_RESET:
       return { ...state };

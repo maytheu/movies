@@ -116,8 +116,11 @@ app.post("/api/admin/about", adminAuth, (req, res) => {
   });
 });
 
-app.post('/api/admin/edit_about', adminAuth, (req, res) => {
-	About.findOneAndUpdate({_id: req.body.id},{ $set: req.body }, { new: true },
+app.post("/api/admin/edit_about", adminAuth, (req, res) => {
+  About.findOneAndUpdate(
+    { _id: req.body.id },
+    { $set: req.body },
+    { new: true },
     (err, doc) => {
       if (err) return res.json({ success: false, err });
       return res.status(200).send({
@@ -126,7 +129,7 @@ app.post('/api/admin/edit_about', adminAuth, (req, res) => {
       });
     }
   );
-})
+});
 
 app.get("/api/admin/contact", (req, res) => {
   About.find({}, (err, contact) => {
