@@ -7,4 +7,6 @@
 #misc
 .env
 
+.npmrc
+
 npm-debug.log*
