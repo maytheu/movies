@@ -1,53 +1,34 @@
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import React, { Component } from "react";
-import { EditorState, convertToRaw, ContentState } from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 
 import "./auth/sign.css";
 import AdminLayout from "../hoc/AdminLayout";
-import {
-  aboutAdmin,
-  contact,
-  editAboutAdmin
-} from "../../actions/adminActions";
+import { aboutAdmin, editAboutAdmin } from "../../actions/adminActions";
 
 class About extends Component {
   state = {
     editorState: EditorState.createEmpty(),
     id: "",
     numLength: 0,
-    valid: false
+    valid: false,
   };
 
-  componentDidMount() {
-    this.props.dispatch(contact()).then(() => {
-      let about = this.props.contact.contact;
-      const contentState = ContentState.createFromBlockArray(
-        htmlToDraft(about.about).contentBlocks
-      );
-      const editorState = EditorState.createWithContent(contentState);
-      this.setState({
-        editorState,
-        id: about._id
-      });
-    });
-  }
-
-  onEditorStateChange = editorState => {
+  onEditorStateChange = (editorState) => {
     this.setState({
-      editorState
+      editorState,
     });
   };
 
-  parseHtmlString = text => {
+  parseHtmlString = (text) => {
     return text.replace(/(<([^>]+)>)/gi, "").length;
   };
 
-  messagePage = msgLength => {
+  messagePage = (msgLength) => {
     if (msgLength <= 140) {
       return 1;
     } else {
@@ -55,7 +36,7 @@ class About extends Component {
     }
   };
 
-  submitHandler = e => {
+  submitHandler = (e) => {
     e.preventDefault();
     let convertedData = draftToHtml(
       convertToRaw(this.state.editorState.getCurrentContent())
@@ -67,13 +48,11 @@ class About extends Component {
         editAboutAdmin({ about: convertedData, id: this.state.id })
       );
     }
-    console.log(convertedData);
   };
 
   render() {
     const { editorState } = this.state;
     console.log(this.state);
-    const tri = "<p>let try this";
     return (
       <AdminLayout>
         <div className="auth">
@@ -88,12 +67,12 @@ class About extends Component {
                 "colorPicker",
                 "link",
                 "emoji",
-                "image"
+                "image",
               ],
               inline: { inDropdown: true },
               list: { inDropdown: true },
               link: { inDropdown: true },
-              history: { inDropdown: true }
+              history: { inDropdown: true },
             }}
             onBlur={() => this.setState({ valid: true })}
             onEditorStateChange={this.onEditorStateChange}
@@ -105,7 +84,7 @@ class About extends Component {
         <div
           dangerouslySetInnerHTML={{
             __html: draftToHtml(convertToRaw(editorState.getCurrentContent()))
-              .length
+              .length,
           }}
         />
         <div>{draftToHtml(convertToRaw(editorState.getCurrentContent()))}</div>
@@ -128,7 +107,7 @@ class About extends Component {
 
 function mapStateToProps(state) {
   return {
-    contact: state.admin
+    contact: state.admin,
   };
 }
 

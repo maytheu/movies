@@ -7,16 +7,16 @@ import { getShows } from "../../actions/movieActions";
 
 class Home extends Component {
   state = {
-    isLoading: true
+    isLoading: true,
   };
   componentDidMount() {
-    this.props.dispatch(getShows()).then(response => {
+    this.props.dispatch(getShows()).then((response) => {
       this.setState({ isLoading: false });
     });
   }
   render() {
     let shows = this.props.isMovies.upcoming ? (
-      this.props.isMovies.upcoming.map(show => (
+      this.props.isMovies.upcoming.map((show) => (
         <div key={show._id}>
           <iframe
             width={`${window.innerWidth}`}
@@ -25,6 +25,7 @@ class Home extends Component {
             frameBorder="0"
             allow="autoplay; encrypted-media"
             allowFullScreen
+            title={show.title}
           />
           <div className="title">{show.title}</div>
         </div>
@@ -38,9 +39,9 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    isMovies: state.movie
+    isMovies: state.movie,
   };
 };
 

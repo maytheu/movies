@@ -18,7 +18,7 @@ class Contact extends Component {
   render() {
     let contact = this.props.contact.contact;
     return (
-      <div className="auth">
+      <div className="auth" style={{height: "100vh"}}>
         {this.state.isLoading ? (
           "Loading"
         ) : (

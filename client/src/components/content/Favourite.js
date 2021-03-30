@@ -10,11 +10,11 @@ import fbIcon from "../../assets/icons/icons8-facebook-50.png";
 
 class Favourite extends Component {
   state = {
-    isLoading: true
+    isLoading: true,
   };
   componentDidMount() {
     this.props.dispatch(getFeatured());
-    this.props.dispatch(authUser()).then(response => {
+    this.props.dispatch(authUser()).then((response) => {
       this.setState({ isLoading: false });
     });
     this.props.dispatch(checkUserVote());
@@ -29,7 +29,7 @@ class Favourite extends Component {
   render() {
     let user = this.props.isUser;
     let shows = this.props.isMovies.favourite ? (
-      this.props.isMovies.favourite.map(show => (
+      this.props.isMovies.favourite.map((show) => (
         <div key={show._id} className="favourite">
           <iframe
             width={`100%`}
@@ -38,6 +38,7 @@ class Favourite extends Component {
             frameBorder="0"
             allow="autoplay; encrypted-media"
             allowFullScreen
+            title={show.title}
           />
           <div className="title_fav left">{show.title}</div>
           <div className="right">
@@ -48,7 +49,7 @@ class Favourite extends Component {
                     style={{
                       background: `url(${fbIcon}) no-repeat`,
                       width: "44px",
-                      height: "46px"
+                      height: "46px",
                     }}
                   />
                   <div>to vote</div>
@@ -75,10 +76,10 @@ class Favourite extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     isMovies: state.movie,
-    isUser: state.user
+    isUser: state.user,
   };
 };
 
